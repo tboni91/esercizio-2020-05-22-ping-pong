@@ -12,7 +12,7 @@ Quanto il contatore raggiunge il valore MAX_VALUE il programma termina.
 ```
 proc_padre manda a proc_figlio il valore 0 attraverso pipeA.
 proc_figlio riceve il valore 0, lo incrementa (=1) e lo manda a proc_padre attraverso pipeB.
-proc_padre riceve il valore 1, lo incremente (=2) e lo manda a proc_figlio attraverso pipeA.
+proc_padre riceve il valore 1, lo incrementa (=2) e lo manda a proc_figlio attraverso pipeA.
 proc_figlio riceve il valore 2 .....
 ```
 fino a MAX_VALUE, quando termina il programma.
