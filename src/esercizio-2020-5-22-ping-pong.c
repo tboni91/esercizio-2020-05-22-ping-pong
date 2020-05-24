@@ -1,9 +1,4 @@
-/*
- * esercizio-2020-5-22-ping-pong.c
- *
- *  Created on: May 21, 2020
- *      Author: marco
- */
+/******* esercizio-2020-5-22-ping-pong ********/
 
 /*Scrivere un programma che realizza un "ping-pong" tra due processi utilizzando una coppia di pipe,
  * una per ogni direzione.
@@ -18,7 +13,6 @@
  #define MAX_VALUE 1000000
  */
 
-// USARE read + sscanf oppure int atoi(const char *nptr)
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
