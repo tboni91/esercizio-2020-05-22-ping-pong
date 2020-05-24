@@ -33,7 +33,7 @@
 #include <errno.h>
 #include <semaphore.h>
 
-#define MAX_VALUE 12
+#define MAX_VALUE 1000000
 
 int *count;
 
