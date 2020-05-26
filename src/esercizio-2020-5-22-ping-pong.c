@@ -52,14 +52,14 @@ int main(int argc, char *argv[]) {
 
 	int res;
 
-	char * chil_buf = malloc(sizeof(int));
-	char * parent_buf = malloc(sizeof(int));
+//	char * chil_buf = malloc(2*sizeof(int));
+//	char * parent_buf = malloc(2*sizeof(int));
 
-	CHECK_MALLOC(chil_buf, "malloc() child")
-	CHECK_MALLOC(parent_buf, "malloc() parent")
+//	CHECK_MALLOC(chil_buf, "malloc() child")
+//	CHECK_MALLOC(parent_buf, "malloc() parent")
 
-	int child_counter;
-	int father_counter;
+	int child_counter = 0;
+	int parent_counter = 0;
 
 	int pipe_f[2];   // pipe father 2 child
 	int pipe_c[2];   // pipe child 2 father
@@ -87,21 +87,21 @@ int main(int argc, char *argv[]) {
 		//child_process(&fd2[1], &fd1[0]);
 
 		//pread(int fd, void *buf, size_t count, off_t offset);
-		while ((res = read(pipe_f[0], chil_buf, sizeof(int))) > 0) {
+		while ((res = read(pipe_f[0], &child_counter, sizeof(int))) > 0) {
 			if (*count >= MAX_VALUE){
 				close(pipe_c[1]);
 				exit(EXIT_SUCCESS);
 			}
-			sscanf(chil_buf, "%d", &child_counter);
+
 			printf("proc_figlio riceve il valore %d, ", child_counter);
 			child_counter++;
 
 			//char tempbuf[sizeof(int)];
-			sprintf(chil_buf, "%d", child_counter);
+			//sprintf(chil_buf, "%d", child_counter);
 
 			usleep(1000);
 
-			res = write(pipe_c[1], chil_buf, strlen(chil_buf));
+			res = write(pipe_c[1], &child_counter, sizeof(int));
 
 			CHECK_ERR(res, "write()")
 
@@ -121,37 +121,37 @@ int main(int argc, char *argv[]) {
 		// fd1[1] SCRITTURA
 		// fd2[0] LETTURA
 
-		sprintf(parent_buf, "%d", 0);
-		printf("[parent] tempbuff %s \n", parent_buf);
+		//sprintf(parent_buf, "%d", 0);
+		//printf("[parent] tempbuff %s \n", parent_buf);
 
-		int res = write(pipe_f[1], parent_buf, strlen(parent_buf));
+		int res = write(pipe_f[1], &parent_counter, sizeof(int));
 
 		CHECK_ERR(res, "write()")
 
-		printf("proc_padre manda a proc_figlio il valore %s attraverso pipe1\n",
-				parent_buf);
+		printf("proc_padre manda a proc_figlio il valore %d attraverso pipe1\n",
+				parent_counter);
 
-		while ((res = read(pipe_c[0], parent_buf, sizeof(int))) > 0) {
+		while ((res = read(pipe_c[0], &parent_counter, sizeof(int))) > 0) {
 			if (*count >= MAX_VALUE){
 				close(pipe_f[1]);
 				goto end;
 			}
 
-			sscanf(parent_buf, "%d", &father_counter);
+			//sscanf(parent_buf, "%d", &parent_counter);
 
-			printf("proc_padre riceve il valore %d, ", father_counter);
-			father_counter++;
+			printf("proc_padre riceve il valore %d, ", parent_counter);
+			parent_counter++;
 
 			//char tempbuf[sizeof(int)];
-			sprintf(parent_buf, "%d", father_counter);
+			//sprintf(parent_buf, "%d", parent_counter);
 
 			usleep(1000);
 
-			res = write(pipe_f[1], parent_buf, strlen(parent_buf));
+			res = write(pipe_f[1], &parent_counter, sizeof(int));
 			CHECK_ERR(res, "write()")
 
 			printf("lo incrementa (=%d) e lo manda a proc_figlio attraverso pipe1\n",
-					father_counter);
+					parent_counter);
 
 			*count += 1;
 		}
